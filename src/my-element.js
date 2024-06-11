@@ -1,23 +1,21 @@
 import { LitElement, css, html } from 'lit'
-import litLogo from './assets/lit.svg'
-import viteLogo from '/vite.svg'
+import { Child1Element } from './child-1-element'
+import { CharacterGetterElement } from './character-getter-element '
+
 
 /**
  * An example element.
  *
  * @slot - This element has a slot
- * @csspart button - The button
+ * @csspart h1 - The h1
  */
 export class MyElement extends LitElement {
   static get properties() {
     return {
-      /**
-       * Copy for the read the docs hint.
-       */
-      docsHint: { type: String },
+
 
       /**
-       * The number of times the button has been clicked.
+       * The number of times the h1 has been clicked.
        */
       count: { type: Number },
     }
@@ -25,33 +23,44 @@ export class MyElement extends LitElement {
 
   constructor() {
     super()
-    this.docsHint = 'Click on the Vite and Lit logos to learn more'
+
     this.count = 0
   }
 
+  myEvent1Handler() {
+    this.count++
+  }
+
+  newCharacterEventHandler(e) {
+    const character = e.detail
+    const characterName = character.name
+    const characterImg = character.image
+
+    this.shadowRoot.querySelector("#character-name").innerHTML = characterName
+    this.shadowRoot.querySelector("#character-img").src = characterImg
+    this.shadowRoot.querySelector("#character-species").innerHTML = character.species
+    this.shadowRoot.querySelector("#character-status").innerHTML = character.status
+  }
+
+
+
   render() {
     return html`
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src=${viteLogo} class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://lit.dev" target="_blank">
-          <img src=${litLogo} class="logo lit" alt="Lit logo" />
-        </a>
-      </div>
-      <slot></slot>
+    
       <div class="card">
-        <button @click=${this._onClick} part="button">
+        <h1>
           count is ${this.count}
-        </button>
-      </div>
-      <p class="read-the-docs">${this.docsHint}</p>
+        </h1>
+        <child-1-element @my-event-1="${this.myEvent1Handler}"></child-1-element>
+      <character-getter-element @new-character-event="${this.newCharacterEventHandler}"></character-getter-element>
+      <h1 id="character-name"></h1>
+      <img id="character-img">  
+      <h3 id="character-species"></h3>
+      <h3 id="character-status"></h3>
+    </div>
     `
   }
 
-  _onClick() {
-    this.count++
-  }
 
   static get styles() {
     return css`
@@ -97,7 +106,7 @@ export class MyElement extends LitElement {
         line-height: 1.1;
       }
 
-      button {
+      h1 {
         border-radius: 8px;
         border: 1px solid transparent;
         padding: 0.6em 1.2em;
@@ -108,11 +117,11 @@ export class MyElement extends LitElement {
         cursor: pointer;
         transition: border-color 0.25s;
       }
-      button:hover {
+      h1:hover {
         border-color: #646cff;
       }
-      button:focus,
-      button:focus-visible {
+      h1:focus,
+      h1:focus-visible {
         outline: 4px auto -webkit-focus-ring-color;
       }
 
@@ -120,11 +129,16 @@ export class MyElement extends LitElement {
         a:hover {
           color: #747bff;
         }
-        button {
+        h1 {
           background-color: #f9f9f9;
         }
       }
-    `
+
+      img{
+        with: 50vw;
+      }
+
+      `
   }
 }
 
