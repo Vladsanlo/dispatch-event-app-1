@@ -7,7 +7,7 @@ import { LitElement, css, html } from 'lit'
  * @slot - This element has a slot
  * @csspart button - The button
  */
-export class CharacterGetterElement extends LitElement {
+export class CharacterGetterElement extends LitElement { 
 
   constructor() {
     super()
@@ -18,14 +18,14 @@ export class CharacterGetterElement extends LitElement {
   }
 
 
-  connectedCallback() {
-    setInterval(() => {
+  getNewCharacter() {
+    
       fetch(`https://rickandmortyapi.com/api/character/${this.newRandomInt()}`)
         .then(response => response.json())
-        .then(jsonData =>  this.dispatchEvent(new CustomEvent('new-character-event', { detail:jsonData})))
+        .then(characterData =>  this.dispatchEvent(new CustomEvent('new-character-event', { detail:characterData})))
 
      
-    }, 10000)
+     
   }
 
 
