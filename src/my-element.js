@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit'
 import { Child1Element } from './child-1-element'
 import { CharacterGetterElement } from './character-getter-element '
-
+import { CharacterCardElement } from './character-card-element'
 
 /**
  * An example element.
@@ -23,23 +23,29 @@ export class MyElement extends LitElement {
 
   constructor() {
     super()
-
     this.count = 0
   }
 
   myEvent1Handler() {
     this.count++
   }
+ 
+  firstUpdated() {
+    let that = this
+
+    setInterval(() => {
+      that.shadowRoot.querySelector("#getter").getNewCharacter()
+    }, 3000)
+  }
 
   newCharacterEventHandler(e) {
     const character = e.detail
-    const characterName = character.name
-    const characterImg = character.image
 
-    this.shadowRoot.querySelector("#character-name").innerHTML = characterName
-    this.shadowRoot.querySelector("#character-img").src = characterImg
-    this.shadowRoot.querySelector("#character-species").innerHTML = character.species
-    this.shadowRoot.querySelector("#character-status").innerHTML = character.status
+    this.shadowRoot.querySelector("#card-1").name = character.name
+    this.shadowRoot.querySelector("#card-1").image = character.image
+    this.shadowRoot.querySelector("#card-1").species = character.species
+    this.shadowRoot.querySelector("#card-1").status = character.status
+
   }
 
 
@@ -52,11 +58,12 @@ export class MyElement extends LitElement {
           count is ${this.count}
         </h1>
         <child-1-element @my-event-1="${this.myEvent1Handler}"></child-1-element>
-      <character-getter-element @new-character-event="${this.newCharacterEventHandler}"></character-getter-element>
-      <h1 id="character-name"></h1>
-      <img id="character-img">  
-      <h3 id="character-species"></h3>
-      <h3 id="character-status"></h3>
+        <character-getter-element id="getter" @new-character-event="${this.newCharacterEventHandler}"></character-getter-element>
+        <character-card-element id="card-1"></character-card-element>
+        <h1 id="character-name"></h1>
+        <img id="character-img">  
+        <h3 id="character-species"></h3>
+        <h3 id="character-status"></h3>
     </div>
     `
   }
