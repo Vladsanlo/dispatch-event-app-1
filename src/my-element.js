@@ -18,34 +18,40 @@ export class MyElement extends LitElement {
        * The number of times the h1 has been clicked.
        */
       count: { type: Number },
+
+      /**
+       * un arreglo de personaje
+       */
+      characters: { type: Array },
+
+
     }
   }
 
   constructor() {
     super()
     this.count = 0
+    this.characters = []
+
   }
 
   myEvent1Handler() {
     this.count++
   }
- 
-  firstUpdated() {
-    let that = this
 
-    setInterval(() => {
-      that.shadowRoot.querySelector("#getter").getNewCharacter()
-    }, 3000)
+  firstUpdated() {
+    const getter = this.shadowRoot.querySelector("#getter")
+
+
+    for (let i = 0; i < 100; i++) {
+      getter.getNewCharacter()
+    }
+
+
   }
 
   newCharacterEventHandler(e) {
-    const character = e.detail
-
-    this.shadowRoot.querySelector("#card-1").name = character.name
-    this.shadowRoot.querySelector("#card-1").image = character.image
-    this.shadowRoot.querySelector("#card-1").species = character.species
-    this.shadowRoot.querySelector("#card-1").status = character.status
-
+    this.characters = [...this.characters, e.detail]
   }
 
 
@@ -59,11 +65,9 @@ export class MyElement extends LitElement {
         </h1>
         <child-1-element @my-event-1="${this.myEvent1Handler}"></child-1-element>
         <character-getter-element id="getter" @new-character-event="${this.newCharacterEventHandler}"></character-getter-element>
-        <character-card-element id="card-1"></character-card-element>
-        <h1 id="character-name"></h1>
-        <img id="character-img">  
-        <h3 id="character-species"></h3>
-        <h3 id="character-status"></h3>
+        <div class="character-table">
+        ${this.characters.map(character => html` <character-card-element class="character-item" name="${character.name}" image="${character.image}" species="${character.species}" status="${character.status}"></character-card-element>`)}
+        </div>
     </div>
     `
   }
@@ -144,6 +148,18 @@ export class MyElement extends LitElement {
       img{
         with: 50vw;
       }
+
+      .character-table{
+        display:grid;
+        grid-template-columns: auto auto auto;
+        pading:10px;
+      }
+
+      .character-item{
+        font-size: 30px;
+        text-align:center;
+      }
+
 
       `
   }
